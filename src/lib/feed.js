@@ -127,7 +127,7 @@ StreamFeed.prototype = {
 	following : function(options, callback) {
 		/*
 		 * List which feeds this feed is following
-		 * 
+		 *
 		 * feed.following({limit:10, filter: ['user:1', 'user:2']}, callback);
 		 */
 		if (options !== undefined && options.filter) {
@@ -143,7 +143,7 @@ StreamFeed.prototype = {
 	followers : function(options, callback) {
 		/*
 		 * List the followers of this feed
-		 * 
+		 *
 		 * feed.followers({limit:10, filter: ['user:1', 'user:2']}, callback);
 		 */
 		if (options !== undefined && options.filter) {
@@ -159,7 +159,7 @@ StreamFeed.prototype = {
 	get : function(options, callback) {
 		/*
 		 * Reads the feed
-		 * 
+		 *
 		 * feed.get({limit: 10, id_lte: 'activity-id'})
 		 * or
 		 * feed.get({limit: 10, mark_seen: true})
@@ -219,7 +219,20 @@ StreamFeed.prototype = {
 			throw new errors.SiteError('Missing app id, which is needed to subscribe, use var client = stream.connect(key, secret, appId);');
 		}
 		return this.getFayeClient().subscribe('/' + this.notificationChannel, callback);
+	},
+
+	unsubscribe : function(callback) {
+		/*
+		 * unsubscribes to any changes in the feed, return a promise
+		 * feed.unsubscribe(callback).then(function(){
+		 * 		console.log('we are now listening to changes');
+		 * });
+		 */
+		if (!this.client.appId) {
+			throw new errors.SiteError('Missing app id, which is needed to unsubscribe, use var client = stream.connect(key, secret, appId);');
+		}
+		return this.getFayeClient().unsubscribe('/' + this.notificationChannel, callback);
 	}
 };
 
-module.exports = StreamFeed; 
+module.exports = StreamFeed;
